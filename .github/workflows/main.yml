@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - prefixes-fix
   pull_request:
     branches:
       - main
