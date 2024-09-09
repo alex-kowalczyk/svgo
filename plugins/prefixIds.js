@@ -249,12 +249,14 @@ export const fn = (_root, params, info) => {
             node.attributes[name] != null &&
             node.attributes[name].length !== 0
           ) {
+            // Split by ';', then process each part
             const parts = node.attributes[name].split(/\s*;\s+/).map((val) => {
-              if (val.endsWith('.end') || val.endsWith('.start')) {
-                const [id, postfix] = val.split('.');
+              // Use regex to find the pattern 'ID.postfix', allowing for possible math expressions
+              return val.replace(/([a-zA-Z_][\w-]*)\.(start|end)/g, (match, id, postfix) => {
+                // Replace the ID part with the prefixed ID, leave the postfix unchanged
                 return `${prefixId(prefixGenerator, id)}.${postfix}`;
-              }
-              return val;
+              });
+
             });
             node.attributes[name] = parts.join('; ');
           }
